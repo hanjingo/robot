@@ -33,3 +33,11 @@
 
 # Macos
 .DS_Store
+
+# VsCode
+.vscode
+
+# Compiled Folder
+build
+bin
+lib
