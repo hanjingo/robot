@@ -5,6 +5,7 @@
 #include <mutex>
 
 namespace Robot {
+namespace Utils {
 
 namespace bpt = boost::property_tree;
 
@@ -61,7 +62,7 @@ bool Config::Reload(std::string& error)
 }
 
 template<class T>
-T Config::DefaultValue(const std::string& name, T def) const
+T Config::GetDefaultValue(const std::string& name, T def) const
 {
   try
   {
@@ -80,7 +81,7 @@ T Config::DefaultValue(const std::string& name, T def) const
 }
 
 template<>
-std::string Config::DefaultValue<std::string>(const std::string& name, std::string def) const 
+std::string Config::GetDefaultValue<std::string>(const std::string& name, std::string def) const 
 {
   try
   {
@@ -98,47 +99,47 @@ std::string Config::DefaultValue<std::string>(const std::string& name, std::stri
   return def;
 }
 
-std::string Config::DefaultString(const std::string& name, const std::string& def) const
+std::string Config::GetDefaultString(const std::string& name, const std::string& def) const
 {
-  std::string bak = DefaultValue(name, def);
+  std::string bak = GetDefaultValue(name, def);
   bak.erase(std::remove(bak.begin(), bak.end(), '"'), bak.end());
   return bak;
 }
 
-bool Config::DefaultBool(const std::string& name, bool def) const
+bool Config::GetDefaultBool(const std::string& name, bool def) const
 {
-  auto bak = DefaultValue(name, std::string(def ? "1" : "0"));
+  auto bak = GetDefaultValue(name, std::string(def ? "1" : "0"));
   bak.erase(std::remove(bak.begin(), bak.end(), '"'), bak.end());
-  return StringToBool(bak);
+  return Types::StringToBool(bak);
 }
 
-int32 Config::DefaultInt(const std::string& name, int32 def) const
+int32 Config::GetDefaultInt(const std::string& name, int32 def) const
 {
-  return DefaultValue(name, def);
+  return GetDefaultValue(name, def);
 }
 
-int64 Config::DefaultInt64(const std::string& name, int64 def) const
+int64 Config::GetDefaultInt64(const std::string& name, int64 def) const
 {
-  return DefaultValue(name, def);
+  return GetDefaultValue(name, def);
 }
 
-float Config::DefaultFloat(const std::string& name, float def) const
+float Config::GetDefaultFloat(const std::string& name, float def) const
 {
-  return DefaultValue(name, def);
+  return GetDefaultValue(name, def);
 }
 
-const std::string& Config::FileName()
+const std::string& Config::GetFileName()
 {
   std::lock_guard<std::mutex> lock(_configLock);
   return _filename;
 }
 
-const std::vector<std::string>& Config::Arguments() const
+const std::vector<std::string>& Config::GetArguments() const
 {
   return _args;
 }
 
-std::vector<std::string> Config::KeysByString(const std::string& name)
+std::vector<std::string> Config::GetKeysByString(const std::string& name)
 {
   std::lock_guard<std::mutex> lock(_configLock);
 
@@ -151,4 +152,4 @@ std::vector<std::string> Config::KeysByString(const std::string& name)
   return keys;
 }
 
-};
+}} // namespace Robot::Utils

@@ -5,6 +5,7 @@
 #include <vector>
 
 namespace Robot {
+namespace Utils {
 
 class Config
 {
@@ -14,25 +15,25 @@ class Config
   ~Config() = default;
 
 public:
-  bool LoadInitial(const std::string& file, std::vector<std::string> args, std::string& error);
+  bool LoadInitial(std::string const&  file, std::vector<std::string> args, std::string& error);
   static Config* Instance();
   bool Reload(std::string& error);
   
-  std::string DefaultString(const std::string& name, const std::string& def) const;
-  bool DefaultBool(const std::string& name, bool def) const;
-  int32 DefaultInt(const std::string& name, int32 def) const;
-  int64 DefaultInt64(const std::string& name, int64 def) const;
-  float DefaultFloat(const std::string& name, float def) const;
+  std::string GetDefaultString(std::string const&  name, std::string const&  def) const;
+  bool GetDefaultBool(std::string const&  name, bool def) const;
+  int32 GetDefaultInt(std::string const&  name, int32 def) const;
+  int64 GetDefaultInt64(std::string const&  name, int64 def) const;
+  float GetDefaultFloat(std::string const&  name, float def) const;
 
-  const std::string& FileName();
-  const std::vector<std::string>& Arguments() const;
-  std::vector<std::string> KeysByString(const std::string& name);
+  std::string const&  GetFileName();
+  const std::vector<std::string>& GetArguments() const;
+  std::vector<std::string> GetKeysByString(std::string const&  name);
 
 private:
   template<class T>
-  T DefaultValue(const std::string& name, T def) const;
+  T GetDefaultValue(std::string const&  name, T def) const;
 };
 
 #define Configer Config::Instance()
 
-};
+}} // namespace Robot::Utils
